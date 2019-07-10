@@ -27,13 +27,14 @@ public class OpenApiController {
 
 
 
+
     private void setAK(String userId, String type, OpenApiRequest request) {
         if ("aliyun".equals(type)) {
-            request.setAccessKeyId("LTAIi2mioTi2P8ZA");
-            request.setAccessSecret("t2qZHjedax8f6QQjGzeQP4vFmgDvzq");
+            request.setAccessKeyId("xxxx");
+            request.setAccessSecret("xxxx");
         } else if ("tencent".equals(type)) {
-            request.setAccessKeyId("AKIDkKgomWtIKBnBMJ9VklX4NRL1SfeOqBD0");
-            request.setAccessSecret("g8LK5bsyqTr0vb3HH2YqwoStBF6i5E8n");
+            request.setAccessKeyId("xxxx");
+            request.setAccessSecret("xxx");
         }
     }
 }
