@@ -1,5 +1,6 @@
 package com.yangle.demo.openapi.aliyun;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.ecs.model.v20140526.DescribeInstancesRequest;
@@ -36,7 +37,7 @@ public class DescribeInstances extends BaseOpenApi {
             IAcsClient client = new DefaultAcsClient(profile);
 
             DescribeInstancesResponse response = client.getAcsResponse(describeInstancesRequest);
-            log.info("DescribeInstancesResponse:{}", response);
+            log.info("DescribeInstancesResponse:{}", JSONObject.toJSON(response));
 
             // 响应结果处理
             ECSResponse res = new ECSResponse();

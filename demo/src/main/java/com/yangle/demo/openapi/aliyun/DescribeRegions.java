@@ -7,27 +7,39 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.google.gson.Gson;
 import com.aliyuncs.ecs.model.v20140526.*;
+import com.yangle.demo.openapi.BaseOpenApi;
+import com.yangle.demo.openapi.OpenApiRequest;
+import com.yangle.demo.openapi.OpenApiResponse;
+import com.yangle.demo.openapi.model.ECSResponse;
+import com.yangle.demo.openapi.model.RegionRequest;
+import com.yangle.demo.openapi.model.RegionResponse;
 
-public class DescribeRegions {
+import java.util.stream.Collectors;
 
-    public static void main(String[] args) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIxga6OlW0XHMp", "meLOTsA1I6jOb54Iru1eNXNVMdvNKU");
+public class DescribeRegions extends BaseOpenApi {
 
-        IAcsClient client = new DefaultAcsClient(profile);
 
-        DescribeRegionsRequest request = new DescribeRegionsRequest();
+    @Override
+    public OpenApiResponse doAction(OpenApiRequest openApiRequest) {
+        RegionRequest req = new RegionRequest();
 
         try {
+            DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", req.getAccessKeyId(), req.getAccessSecret());
+
+            IAcsClient client = new DefaultAcsClient(profile);
+
+            DescribeRegionsRequest request = new DescribeRegionsRequest();
+
+
             DescribeRegionsResponse response = client.getAcsResponse(request);
-            System.out.println(new Gson().toJson(response));
+
+            RegionResponse res = new RegionResponse();
+            res.setDetails(response.getRegions().stream().map(o -> new RegionResponse.RegionDetail(o.getBizRegionId(), o.getLocalName())).collect(Collectors.toList()));
+            return res;
         } catch (ServerException e) {
-            e.printStackTrace();
+            return ECSResponse.buildByAliServerException(e);
         } catch (ClientException e) {
-            System.out.println("ErrCode:" + e.getErrCode());
-            System.out.println("ErrMsg:" + e.getErrMsg());
-            System.out.println("RequestId:" + e.getRequestId());
+            return ECSResponse.buildByAliClientException(e);
         }
-
     }
-
 }
