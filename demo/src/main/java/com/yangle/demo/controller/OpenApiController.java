@@ -1,6 +1,7 @@
 package com.yangle.demo.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.yangle.demo.openapi.model.ECSRequest;
 import com.yangle.demo.openapi.OpenApiFactory;
 import com.yangle.demo.openapi.OpenApiRequest;
@@ -28,28 +29,35 @@ public class OpenApiController {
     }
 
     @RequestMapping("/query/region")
-    public OpenApiResponse queryRegion() {
+    public JSONArray queryRegion() {
+
+        // 查询用户绑定了几个云厂商
 
         RegionRequest req1 = new RegionRequest();
         setAK("", "aliyun", req1);
-        RegionResponse res1 = (RegionResponse) OpenApiFactory.callOpenApi("DescribeRegions", "aliyun", req1);
+        OpenApiResponse res1 = OpenApiFactory.callOpenApi("DescribeRegions", "aliyun", req1);
 
         RegionRequest req2 = new RegionRequest();
-        setAK("", "aliyun", req1);
-        RegionResponse res2 = (RegionResponse) OpenApiFactory.callOpenApi("DescribeRegions", "tencent", req1);
+        setAK("", "tencent", req2);
+        OpenApiResponse res2 =  OpenApiFactory.callOpenApi("DescribeRegions", "tencent", req2);
 
+        // 合并
+        JSONArray array = new JSONArray();
+        array.add(res1);
+        array.add(res2);
 
-        return null;
+        return array;
     }
 
 
     private void setAK(String userId, String type, OpenApiRequest request) {
         if ("aliyun".equals(type)) {
-            request.setAccessKeyId("XXX");
-            request.setAccessSecret("XXX");
+            request.setAccessKeyId("LTAIi2mioTi2P8ZA");
+            request.setAccessSecret("t2qZHjedax8f6QQjGzeQP4vFmgDvzq");
         } else if ("tencent".equals(type)) {
-            request.setAccessKeyId("xxxx");
-            request.setAccessSecret("xxx");
+            request.setAccessKeyId("AKIDkKgomWtIKBnBMJ9VklX4NRL1SfeOqBD0");
+            request.setAccessSecret("g8LK5bsyqTr0vb3HH2YqwoStBF6i5E8n");
         }
     }
+
 }

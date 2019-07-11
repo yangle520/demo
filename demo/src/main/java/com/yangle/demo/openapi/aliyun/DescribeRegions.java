@@ -1,5 +1,6 @@
 package com.yangle.demo.openapi.aliyun;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
@@ -13,15 +14,17 @@ import com.yangle.demo.openapi.OpenApiResponse;
 import com.yangle.demo.openapi.model.ECSResponse;
 import com.yangle.demo.openapi.model.RegionRequest;
 import com.yangle.demo.openapi.model.RegionResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 public class DescribeRegions extends BaseOpenApi {
 
 
     @Override
     public OpenApiResponse doAction(OpenApiRequest openApiRequest) {
-        RegionRequest req = new RegionRequest();
+        RegionRequest req = (RegionRequest) openApiRequest;
 
         try {
             DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", req.getAccessKeyId(), req.getAccessSecret());
@@ -32,8 +35,10 @@ public class DescribeRegions extends BaseOpenApi {
 
 
             DescribeRegionsResponse response = client.getAcsResponse(request);
+            log.info("DescribeRegionsResponse:{}", JSONObject.toJSONString(response));
 
             RegionResponse res = new RegionResponse();
+            res.setType("aliyun");
             res.setDetails(response.getRegions().stream().map(o -> new RegionResponse.RegionDetail(o.getBizRegionId(), o.getLocalName())).collect(Collectors.toList()));
             return res;
         } catch (ServerException e) {
