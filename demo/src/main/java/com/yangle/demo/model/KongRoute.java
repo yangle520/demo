@@ -1,10 +1,13 @@
 package com.yangle.demo.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder(toBuilder = true)
 public class KongRoute {
 
     private Long         updated_at;
@@ -15,7 +18,7 @@ public class KongRoute {
     private String       name;
     private List<String> methods;
     private String       sources;
-    private Boolean       preserve_host;
+    private Boolean      preserve_host;
     private Integer      regex_priority;
     private KongIdDto    service;
     private List<String> paths;

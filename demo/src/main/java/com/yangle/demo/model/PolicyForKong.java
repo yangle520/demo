@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KongIdDto {
-
-    private String id;
+public class PolicyForKong {
+    private String path;
+    private String action;
+    private String effect;
 }

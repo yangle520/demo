@@ -47,4 +47,13 @@ public class DescribeRegions extends BaseOpenApi {
             return ECSResponse.buildByAliClientException(e);
         }
     }
+
+    public static void main(String[] args) {
+        DescribeRegions d = new DescribeRegions();
+        RegionRequest req = new RegionRequest();
+        req.setAccessKeyId("LTAIF4pQ5PBUgBiGa");
+        req.setAccessSecret("BIamRCTIyvUrTumpTNBS7QZWzjxj7O");
+        System.out.println(d.doAction(req));
+        ;
+    }
 }

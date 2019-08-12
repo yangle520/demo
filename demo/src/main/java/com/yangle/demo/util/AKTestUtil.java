@@ -16,20 +16,33 @@ import java.util.stream.Collectors;
 public class AKTestUtil {
 
     private static final String NORMAL_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~";
-    private static final String accessKeyId = "UroJTwfvekDfuBZf";
-    private static final String secret      = "uDWffMfOn72ObqJWmjHfxtI2EK4D7f";
+    private static final String accessKeyId = "xxxxxx";
+    private static final String secret      = "xxxxxxxxxx";
 
+    public static void main(String[] args) throws Exception {
+
+        // 请求参数 -- 包含 公共参数 和 接口参数
+        JSONObject params = new JSONObject();
+        params.put("Action", "aaaa!@#$%&*_+)(");
+        params.put("Region", "bbb");
+
+        // 生成http请求url
+        String url = getUrl(params, accessKeyId, secret);
+        System.out.println(url);
+    }
 
     public static String getUrl(JSONObject json, String ak, String aks) throws Exception {
 
-        // 原始请求参数
+        // 将AK加入请求参数
         json.put("AccessKeyId", ak);
 
         // 将原始uri 中的key value 进行 encode
-        List<String> params = json.keySet().stream().map(key -> key + "=" + encode(json.getString(key))).collect(Collectors.toList());
+        List<String> params = json.keySet().stream().map(key -> encode(key) + "=" + encode(json.getString(key))).collect(Collectors.toList());
+
+        // 排序参数
         List<String> pList = params.stream().map(AKTestUtil::encode).sorted().collect(Collectors.toList());
 
-        // 将转译后的请求参数用&拼接  %26 == &
+        // 将转译后的请求参数用&拼接   & encode 之后 是 %26
         String canonicalizedQueryString = Joiner.on("%26").join(pList);
         System.out.println(canonicalizedQueryString);
 
@@ -43,12 +56,11 @@ public class AKTestUtil {
 
         // 最终发出的url  需要对value 进行转译
         String url = Joiner.on("&").join(params) + "&Signature=" + encode(hmac);
-        System.out.println(url);
         return url;
     }
 
 
-    private static String HmacSHA1Encrypt(String encryptText, String encryptKey) throws Exception {
+    public static String HmacSHA1Encrypt(String encryptText, String encryptKey) throws Exception {
 
         //根据给定的字节数组构造一个密钥,第二参数指定一个密钥算法的名称
         SecretKey secretKey = new SecretKeySpec(encryptKey.getBytes(), "HmacSHA1");
@@ -66,27 +78,12 @@ public class AKTestUtil {
     }
 
     private static String encode(String s) {
-        List<String> list = Lists.newArrayList();
-        String[] v = s.split("");
-        for (String a : v) {
-            try {
-                if (a.equals(" ")) {
-                    list.add("%20");
-                } else if (a.equals("*")) {
-                    list.add("%2A");
-                } else if (!NORMAL_CHAR.contains(a)) {
-                    list.add(URLEncoder.encode(a, "UTF-8"));
-                } else {
-                    list.add(a);
-                }
-            } catch (UnsupportedEncodingException e) {
-            }
+        try {
+            return s != null ? URLEncoder.encode(s, "UTF-8").replace("+", "%20")
+                    .replace("*", "%2A").replace("%7E", "~") : null;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
         }
-        return Joiner.on("").join(list);
-    }
-
-    public static void main(String[] args) {
-        JSONObject json = new JSONObject();
-        System.out.println(encode("\""));
     }
 }

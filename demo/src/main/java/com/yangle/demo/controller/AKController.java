@@ -1,6 +1,7 @@
 package com.yangle.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yangle.demo.openapi.BaseOpenApi;
 import com.yangle.demo.util.AKTestUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,7 @@ import java.util.Map;
 public class AKController {
 
     @RequestMapping("/ak/uri")
-    public String ak(HttpServletRequest request, String ak, String aks) throws Exception {
+    public String ak(HttpServletRequest request, String ak, String aks, String method) throws Exception {
         Map<String, String[]> map = request.getParameterMap();
 
         JSONObject json = new JSONObject();
