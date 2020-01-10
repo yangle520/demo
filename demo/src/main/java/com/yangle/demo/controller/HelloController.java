@@ -10,23 +10,38 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.UUID;
 
-import static com.yangle.demo.util.AKTestUtil.HmacSHA1Encrypt;
+import static com.yangle.demo.util.SignatureUtil.HmacSHA1Encrypt;
 
 @RestController
 @Slf4j
 public class HelloController {
 
 
-    @GetMapping(params = "Action=CreateDBInstance")
-    public void CreateDBInstance(@RequestHeader(name = "x-user-id", required = false) String userId,
-                                 @RequestHeader(name = "RequestId", required = false) String requestId) {
-        log.info("userId:{},requestId:{}", userId, requestId);
+    @GetMapping(value = "/ecs", params = "Action=DescribeInstances")
+    public String DescribeInstances(HttpServletRequest request,
+                                    @RequestHeader(name = "iam-user-id", required = false) String userId,
+                                    @RequestHeader(name = "iam-user-name", required = false) String userName,
+                                    @RequestHeader(name = "iam-user-type", required = false) String userType,
+                                    @RequestHeader(name = "iam-parent-id", required = false) String parentId,
+                                    @RequestHeader(name = "iam-parent-name", required = false) String parentName,
+                                    @RequestHeader(name = "iam-policy", required = false) String policy) {
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String paramName = (String) headerNames.nextElement();
+            if (paramName.startsWith("iam-")) {
+                String paramValue = request.getHeader(paramName);
+                log.info("{}:{}", paramName, paramValue);
+            }
+        }
+        return "123";
     }
 
-    @PostMapping(params = "Action=DeleteDBInstance")
+    @PostMapping(value = "", params = "Action=DeleteDBInstance")
     public RestfulEntity<Long> hello(@RequestHeader(name = "x-user-id", required = false) String userId,
                                      @RequestHeader(name = "RequestId", required = false) String requestId,
                                      @RequestParam(name = "name", required = false) String name,
@@ -37,7 +52,7 @@ public class HelloController {
     }
 
 
-    @RequestMapping("/a/b/b")
+    @RequestMapping("/a")
     public String abb() {
         return "abb";
     }

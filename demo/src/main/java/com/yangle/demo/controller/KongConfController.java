@@ -49,7 +49,7 @@ public class KongConfController {
 
                     if (path.startsWith("/api/")) {
                         String proxyPass = ((NgxBlock) l).findParam("proxy_pass").getValue();
-                        System.out.println(path + "##" + proxyPass);
+                        System.out.println(path);
                         apis.add(path + "##" + proxyPass);
                     }
                 }
@@ -74,7 +74,10 @@ public class KongConfController {
         apis.forEach(api -> {
             String path = api.substring(0, api.indexOf("##"));
             String host = api.substring(api.indexOf("http://") + 7, api.lastIndexOf(":"));
-            String port = api.substring(api.lastIndexOf(":") + 1).replace("/", "");
+            String port = api.substring(api.lastIndexOf(":") + 1);
+            if (port.contains("/")) {
+                port = port.substring(0, port.indexOf("/"));
+            }
             String id = UUID.randomUUID().toString();
 
             KongService s = KongService.builder()

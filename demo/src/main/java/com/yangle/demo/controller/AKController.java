@@ -1,8 +1,7 @@
 package com.yangle.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yangle.demo.openapi.BaseOpenApi;
-import com.yangle.demo.util.AKTestUtil;
+import com.yangle.demo.util.SignatureUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +22,6 @@ public class AKController {
             }
         }
 
-        return AKTestUtil.getUrl(json, ak, aks);
+        return SignatureUtil.getUrl(json, ak, aks);
     }
 }

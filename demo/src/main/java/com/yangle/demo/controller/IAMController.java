@@ -2,10 +2,7 @@ package com.yangle.demo.controller;
 
 import com.yangle.demo.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/iam")
@@ -13,9 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class IAMController {
 
     @PostMapping(params = "Action=user")
-    public User post(@RequestBody User u) {
-        log.info("11111111111");
-        return u;
+    public String post(@RequestHeader(value = "iam-user-id", required = false) String userId,
+                       @RequestHeader(value = "iam-user-name", required = false) String userName,
+                       @RequestHeader(value = "iam-user-type", required = false) String userType,
+                       @RequestHeader(value = "iam-parent-id", required = false) String parentId,
+                       @RequestHeader(value = "iam-parent-name", required = false) String parentName) {
+        log.info("{}$${}$${}$${}$${}", userId, userName, userType, parentId, parentName);
+        return String.format("%s|||%s|||%s|||%s|||%s", userId, userName, userType, parentId, parentName);
     }
 
     @PostMapping("/aaa")

@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/uco")
@@ -24,6 +25,16 @@ public class FileFormatController {
 
     @RequestMapping("/test/file")
     public boolean formatFile() {
+        String data = "{\"list\":[{\"href\":\"/console/#/ecs/virtualMachine\",\"icon\":\"icon-ecs\",\"name\":\"弹性云主机\"},{\"href\":\"/console/#/ebs/hardDisk\",\"icon\":\"icon-ebs\",\"name\":\"云硬盘\"},{\"href\":\"/console/#/network/vpc/list\",\"icon\":\"icon-vpc\",\"name\":\"虚拟专有云\"},{\"href\":\"/console/#/network/publicIP/list\",\"icon\":\"icon-ip\",\"name\":\"弹性公网IP\"}]}";
+        List<String> s = Stream.of(data.replace("{", "").replace("}", "").split(","))
+                .filter(x -> x.contains("name"))
+                .map(x -> x.split(":"))
+                .map(x -> x[1])
+                .map(x -> x.replace("\"", ""))
+                .map(x -> x.replace("[", ""))
+                .map(x -> x.replace("]", ""))
+                .collect(Collectors.toList());
+
 
         try {
             InputStream inputStream = new FileInputStream("D:\\各节点组件(1).xlsx");

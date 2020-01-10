@@ -2,7 +2,6 @@ package com.yangle.demo.util;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
@@ -13,9 +12,8 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AKTestUtil {
+public class SignatureUtil {
 
-    private static final String NORMAL_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~";
     private static final String accessKeyId = "xxxxxx";
     private static final String secret      = "xxxxxxxxxx";
 
@@ -23,13 +21,17 @@ public class AKTestUtil {
 
         // 请求参数 -- 包含 公共参数 和 接口参数
         JSONObject params = new JSONObject();
-        params.put("Action", "aaaa!@#$%&*_+)(");
+        params.put("Action", "aaaa");
         params.put("Region", "bbb");
 
+        String endpoint = "https://api.unicloud.com/instance?";
+
         // 生成http请求url
-        String url = getUrl(params, accessKeyId, secret);
+        String url = endpoint + getUrl(params, accessKeyId, secret);
         System.out.println(url);
+
     }
+
 
     public static String getUrl(JSONObject json, String ak, String aks) throws Exception {
 
@@ -40,7 +42,7 @@ public class AKTestUtil {
         List<String> params = json.keySet().stream().map(key -> encode(key) + "=" + encode(json.getString(key))).collect(Collectors.toList());
 
         // 排序参数
-        List<String> pList = params.stream().map(AKTestUtil::encode).sorted().collect(Collectors.toList());
+        List<String> pList = params.stream().map(SignatureUtil::encode).sorted().collect(Collectors.toList());
 
         // 将转译后的请求参数用&拼接   & encode 之后 是 %26
         String canonicalizedQueryString = Joiner.on("%26").join(pList);
@@ -58,7 +60,6 @@ public class AKTestUtil {
         String url = Joiner.on("&").join(params) + "&Signature=" + encode(hmac);
         return url;
     }
-
 
     public static String HmacSHA1Encrypt(String encryptText, String encryptKey) throws Exception {
 
@@ -86,4 +87,5 @@ public class AKTestUtil {
             return "";
         }
     }
+
 }
