@@ -14,17 +14,25 @@ import java.util.stream.Collectors;
 
 public class SignatureUtil {
 
-    private static final String accessKeyId = "xxxxxx";
-    private static final String secret      = "xxxxxxxxxx";
+    private static final String accessKeyId = "1mwCS0tTvl7dfYv2";
+    private static final String secret      = "yN43upw1KtkkopwpbdbmIon94KUzkW";
+    private static final String method      = "POST";
 
     public static void main(String[] args) throws Exception {
 
         // 请求参数 -- 包含 公共参数 和 接口参数
         JSONObject params = new JSONObject();
-        params.put("Action", "aaaa");
-        params.put("Region", "bbb");
+        params.put("RegionId", "HB1-BJMY");
+        params.put("Format", "JSON");
+        params.put("SignatureMethod", "HMAC-SHA1");
+        params.put("SignatureVersion", "1.0");
+        params.put("SignatureNonce", "825dc46765229d9fee42f6b3a69f1c640.29155700 1599548915");
+        params.put("Timestamp", "2020-09-08T07:08:35Z");
+        params.put("Action", "RunEcs");
+        params.put("Version", "2");
 
-        String endpoint = "https://api.unicloud.com/instance?";
+
+        String endpoint = "";
 
         // 生成http请求url
         String url = endpoint + getUrl(params, accessKeyId, secret);
@@ -49,7 +57,7 @@ public class SignatureUtil {
         System.out.println(canonicalizedQueryString);
 
         // 生成 stringToSign
-        String stringToSign = Joiner.on("&").join("GET", URLEncoder.encode("/", "utf-8"), canonicalizedQueryString);
+        String stringToSign = Joiner.on("&").join(method, URLEncoder.encode("/", "utf-8"), canonicalizedQueryString);
         System.out.println(stringToSign);
 
         // 生成 hmac

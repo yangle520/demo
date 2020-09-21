@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8"/>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="qmbox qm_con_body_content qqmail_webmail_only" id="mailContentContainer" style="">
+    <style type="text/css">
+        .qmbox body {
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            font-family: "Verdana, Arial, Helvetica, sans-serif";
+            font-size: 14px;
+            line-height: 24px;
+        }
+
+        .qmbox div, .qmbox p, .qmbox span, .qmbox img {
+            margin: 0;
+            padding: 0;
+        }
+
+        .qmbox img {
+            border: none;
+        }
+
+        .qmbox .contaner {
+            margin: 0 auto;
+        }
+
+
+        .qmbox .content {
+            margin: 4px;
+        }
+
+        .qmbox .biaoti {
+            padding: 6px 6px 60px 6px;
+            color: #000;
+        }
+
+        .qmbox .xtop, .qmbox .xbottom {
+            display: block;
+            font-size: 1px;
+        }
+
+        .qmbox .xb1, .qmbox .xb2, .qmbox .xb3, .qmbox .xb4 {
+            display: block;
+            overflow: hidden;
+        }
+
+        .qmbox .xb1, .qmbox .xb2, .qmbox .xb3 {
+            height: 1px;
+        }
+
+        .qmbox .xb2, .qmbox .xb3, .qmbox .xb4 {
+            border-left: 1px solid #BCBCBC;
+            border-right: 1px solid #BCBCBC;
+        }
+
+        .qmbox .xb1 {
+            margin: 0 5px;
+            background: #BCBCBC;
+        }
+
+        .qmbox .xb2 {
+            margin: 0 3px;
+            border-width: 0 2px;
+        }
+
+        .qmbox .xb3 {
+            margin: 0 2px;
+        }
+
+        .qmbox .xb4 {
+            height: 2px;
+            margin: 0 1px;
+        }
+
+        .qmbox .xboxcontent {
+            display: block;
+            border-width: 0 1px;
+        }
+
+        .qmbox .line {
+            margin-top: 6px;
+            border-top: 1px dashed #B9B9B9;
+            padding: 4px;
+        }
+
+        .qmbox .neirong {
+            padding: 6px;
+            text-indent: 2em;
+            color: #666666;
+        }
+
+        .qmbox .foot {
+            padding: 60px 6px 6px 6px;
+            border-bottom: 1px dashed #B9B9B9;
+            color: #777;
+        }
+
+        .qmbox .font_darkblue {
+            color: #006699;
+            font-weight: bold;
+        }
+
+        .qmbox .font_lightblue {
+            color: #008BD1;
+            font-weight: bold;
+        }
+
+        .qmbox .font_gray {
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+    <div class="contaner">
+        <div class="content">
+            <p class="biaoti"><b>您好：</b></p>
+            <div class="xboxcontent">
+                <div class="neirong">
+                    <p>
+                        <b> 请输入姓名：</b>
+                        <input id="userName" value="" class="form-input form-control" data-v-164ffb4c=""
+                               data-v-9b4697c2="">
+                    </p>
+                    <p>
+                        <b> 请输入身份证号：</b>
+                        <input id="idNo" value="" class="form-input form-control" data-v-164ffb4c=""
+                               data-v-9b4697c2="">
+                    </p>
+                    <input type="button" onclick="identify()" value="下一步">
+                </div>
+            </div>
+            <div class="foot">
+                <p><b>紫光云</b></p>
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+        .qmbox style, .qmbox script, .qmbox head, .qmbox link, .qmbox meta {
+            display: none !important;
+        }
+    </style>
+    <script type="text/javascript">
+        function identify() {
+            var url = "/api/doc/uploadInfo?name=" + $("#userName").val() + "&idNo=" + $("#idNo").val();
+            $.get(url, function (data) {
+                if(data.code == 0){
+                    window.location.href= data.url
+                }else {
+                    alert(data.msg)
+                }
+            });
+        }
+    </script>
+</div>
+</body>
+</html>
